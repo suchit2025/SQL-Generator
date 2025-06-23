@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create and Drop User Statement Generator</title>
+    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="pattern-overlay"></div>
+    <div class="particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <nav class="navbar">
+        <div class="nav-container nav-flex">
+            <div class="nav-main-title">
+                <a href="index.html" class="nav-logo-text">Home</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>Create and Drop User Statement Generator</h1>
+        
+        <div class="selection-container">
+            <select id="operationType" onchange="showOperationForms()" aria-label="Select operation type" title="Select operation type">
+                <option value="">Select Operation</option>
+                <option value="create">Create User</option>
+                <option value="drop">Drop User</option>
+            </select>
+        </div>
+
+        <!-- User Type Selection for "Create User" (as Cards) -->
+        <div id="userTypeSelectionContainer" class="hidden cards-container">
+            <a href="#" class="card user-type-card" onclick="showUserTypeForm('normal'); return false;">
+                <i class="fas fa-user card-icon"></i>
+                <h2>Normal User</h2>
+            </a>
+            <a href="#" class="card user-type-card" onclick="showUserTypeForm('batch'); return false;">
+                <i class="fas fa-users card-icon"></i>
+                <h2>Batch User</h2>
+            </a>
+            <a href="#" class="card user-type-card" onclick="showUserTypeForm('system'); return false;">
+                <i class="fas fa-robot card-icon"></i> 
+                <h2>System User</h2>
+            </a>
+        </div>
+
+        <!-- Normal User Form -->
+        <div id="normalUserForm" class="hidden">
+            <h2>Create Normal User</h2>
+            <form id="normalUserInternalForm" class="columns-form">
+                <div class="column">
+                    <fieldset>
+                        <legend>User Details</legend>
+                        <div class="form-group">
+                            <label for="normalLastName" class="required" >Last Name:</label>
+                            <input type="text" id="normalLastName" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="normalFirstName" class="required">First Name:</label>
+                            <input type="text" id="normalFirstName" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="normalUserEmail" class="required">User Email ID:</label>
+                            <input type="email" id="normalUserEmail" required>
+                        </div>
+                    </fieldset>
+                </div>
+
+                <div class="column">
+                    <fieldset>
+                        <legend>Requestor Information</legend>
+                        <div class="form-group">
+                            <label for="normalRequestorName">Requestor Name:</label>
+                            <input type="text" id="normalRequestorName">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="normalRequestorEmail">Requestor Email:</label>
+                            <input type="email" id="normalRequestorEmail">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="normalSrNumber" class="required">SR Number:</label>
+                            <input type="text" id="normalSrNumber" placeholder="e.g., REQ1234567" required>
+                        </div>
+                    </fieldset>
+                </div>
+
+                <div class="column">
+                    <fieldset>
+                        <legend>User Configuration & Classification</legend>
+                        <div class="form-group">
+                            <label for="normalUserCapability" class="required">User Capability:</label>
+                            <input type="text" id="normalUserCapability" value="Finance - PNL" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="normalUserClassification" class="required">User Classification:</label>
+                            <select id="normalUserClassification" required>
+                                <option value="Technical_User">Technical User</option>
+                                <option value="Business User">Business User</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="normalUserCapabilityGrouping" class="required">User Capability Grouping:</label>
+                            <select id="normalUserCapabilityGrouping" required>
+                                <option value="">Select Group</option>
+                                <option value="ESRA">ESRA</option>
+                                <option value="Finance Connect">Finance Connect</option>
+                                <option value="MDT">MDT</option>
+                                <option value="ZBB">ZBB</option>
+                                <option value="IPA">IPA</option>
+                                <option value="SCSM">SCSM</option>
+                                <option value="FVIH">FVIH</option>
+                            </select>
+                        </div>
+                    </fieldset>
+                </div>
+
+                <div class="column">
+                    <div class="form-group">
+                        <label for="normalServiceOwner" class="required">Service Owner:</label>
+                        <input type="text" id="normalServiceOwner" placeholder="e.g., Jane Smith" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="normalConnectType" class="required">Connect/NonConnect:</label>
+                        <select id="normalConnectType" required>
+                            <option value="">Select</option>
+                            <option value="Connect">Connect</option>
+                            <option value="NonConnect">NonConnect</option>
+                            <option value="Business User">Business User</option>
+                        </select>
+                    </div>
+                </div>
+
+                
+                <button type="button" onclick="generateUserSQL('normal')">Generate SQL</button>
+            </form>
+
+            <div id="normalSqlOutput" class="sql-output">
+                <pre><code id="normalSqlStatement"></code></pre>
+                <button id="normalCopyButton" onclick="copyUserSQL('normal')" class="hidden">Copy SQL</button>
+            </div>
+        </div>
+
+        <!-- Batch User Form (Initially a copy of Normal User Form) -->
+        <div id="batchUserForm" class="hidden">
+            <h2>Create Batch User</h2>
+            <form id="batchUserInternalForm">
+                <div class="form-group"><label for="batchLastName">Last Name:</label><input type="text" id="batchLastName" required></div>
+                <div class="form-group"><label for="batchFirstName">First Name:</label><input type="text" id="batchFirstName" required></div>
+                <div class="form-group"><label for="batchUserEmail">User Email ID:</label><input type="email" id="batchUserEmail" required></div>
+                <div class="form-group"><label for="batchRequestorName">Requestor Name:</label><input type="text" id="batchRequestorName" value="Geetha.Jonnadula" required></div>
+                <div class="form-group"><label for="batchRequestorEmail">Requestor Email:</label><input type="email" id="batchRequestorEmail" value="Geetha.Jonnadula@unilever.com" required></div>
+                <div class="form-group"><label for="batchSrNumber">SR Number:</label><input type="text" id="batchSrNumber" placeholder="REQ3504562" required></div>
+                <div class="form-group"><label for="batchUserCapability">User Capability:</label><input type="text" id="batchUserCapability" value="Batch Processing" required></div>
+                <div class="form-group"><label for="batchUserClassification">User Classification:</label><input type="text" id="batchUserClassification" value="Batch_User" required></div>
+                <div class="form-group"><label for="batchUserCapabilityGrouping">User Capability Grouping:</label><input type="text" id="batchUserCapabilityGrouping" value="System" required></div>
+                <div class="form-group"><label for="batchServiceOwner">Service Owner:</label><input type="text" id="batchServiceOwner" value="Rakesh.Radhakrishnan" required></div>
+                <div class="form-group">
+                    <label for="batchConnectType">Connect/NonConnect:</label>
+                    <select id="batchConnectType" required>
+                        <option value="NonConnect" selected>NonConnect</option>
+                        <option value="Connect">Connect</option>
+                    </select>
+                </div>
+                <button type="button" onclick="generateUserSQL('batch')">Generate SQL</button>
+            </form>
+            <div id="batchSqlOutput" class="sql-output">
+                <pre><code id="batchSqlStatement"></code></pre>
+                <button id="batchCopyButton" onclick="copyUserSQL('batch')" class="hidden">Copy SQL</button>
+            </div>
+        </div>
+
+        <!-- System User Form (Initially a copy of Normal User Form) -->
+        <div id="systemUserForm" class="hidden">
+            <h2>Create System User</h2>
+            <form id="systemUserInternalForm">
+                <div class="form-group"><label for="systemLastName">Last Name (e.g., AppName):</label><input type="text" id="systemLastName" required></div>
+                <div class="form-group"><label for="systemFirstName">First Name (e.g., Service):</label><input type="text" id="systemFirstName" required></div>
+                <div class="form-group"><label for="systemUserEmail">User Email ID (e.g., dl@example.com):</label><input type="email" id="systemUserEmail" required></div>
+                <div class="form-group"><label for="systemRequestorName">Requestor Name:</label><input type="text" id="systemRequestorName" value="Geetha.Jonnadula" required></div>
+                <div class="form-group"><label for="systemRequestorEmail">Requestor Email:</label><input type="email" id="systemRequestorEmail" value="Geetha.Jonnadula@unilever.com" required></div>
+                <div class="form-group"><label for="systemSrNumber">SR Number:</label><input type="text" id="systemSrNumber" placeholder="REQ3504562" required></div>
+                <div class="form-group"><label for="systemUserCapability">User Capability:</label><input type="text" id="systemUserCapability" value="System Task" required></div>
+                <div class="form-group"><label for="systemUserClassification">User Classification:</label><input type="text" id="systemUserClassification" value="System_User" required></div>
+                <div class="form-group"><label for="systemUserCapabilityGrouping">User Capability Grouping:</label><input type="text" id="systemUserCapabilityGrouping" value="System" required></div>
+                <div class="form-group"><label for="systemServiceOwner">Service Owner:</label><input type="text" id="systemServiceOwner" value="Rakesh.Radhakrishnan" required></div>
+                <div class="form-group">
+                    <label for="systemConnectType">Connect/NonConnect:</label>
+                    <select id="systemConnectType" required>
+                        <option value="NonConnect" selected>NonConnect</option>
+                        <option value="Connect">Connect</option>
+                    </select>
+                </div>
+                <button type="button" onclick="generateUserSQL('system')">Generate SQL</button>
+            </form>
+            <div id="systemSqlOutput" class="sql-output">
+                <pre><code id="systemSqlStatement"></code></pre>
+                <button id="systemCopyButton" onclick="copyUserSQL('system')" class="hidden">Copy SQL</button>
+            </div>
+        </div>
+
+        <div id="dropUserForm" class="hidden drop-user-flex">
+            <div class="form-side">
+                <form id="dropForm" onsubmit="generateDropSQL(); return false;">
+                    <div class="form-group">
+                        <label for="databaseUserName">Database Username(s):
+                            <span class="info-btn" data-info="The usernames that are going to be dropped. Enter one username per line. Format: firstname.lastname">
+                                <i class="fa fa-info-circle"></i>
+                            </span>
+                        </label>
+                        <textarea id="databaseUserName" rows="3" placeholder="For multiple users: Enter one username per line" required class="multi-line"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="reqName">Requestor Name:
+                            <span class="info-btn" data-info="The name of the team or person initiating the drop request.">
+                                <i class="fa fa-info-circle"></i>
+                            </span>
+                        </label>
+                        <input type="text" id="reqName" placeholder="e.g., DBA Team" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reqEmail">Requestor Email:
+                            <span class="info-btn" data-info="Official email ID of the requesting team or person.">
+                                <i class="fa fa-info-circle"></i>
+                            </span>
+                        </label>
+                        <input type="email" id="reqEmail" placeholder="e.g., UE230007@Teradata.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reqNumber">Request Number:
+                            <span class="info-btn" data-info="Change request number (CHG number).">
+                                <i class="fa fa-info-circle"></i>
+                            </span>
+                        </label>
+                        <input type="text" id="reqNumber" placeholder="e.g., CHG0355086" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reqComments">Request Comments:
+                            <span class="info-btn" data-info="Any additional comments regarding the drop request.">
+                                <i class="fa fa-info-circle"></i>
+                            </span>
+                        </label>
+                        <input type="text" id="reqComments" placeholder="e.g., Dropping user under CHG0355086" required>
+                    </div>
+                    <button type="submit">Generate SQL</button>
+                </form>
+                <div id="dropSqlOutput" class="sql-output">
+                    <pre><code id="dropSqlStatement"></code></pre>
+                    <button id="dropCopyButton" onclick="copyDropSQL()" class="hidden">Copy SQL</button>
+                </div>
+            </div>
+            <!-- Parameter info box removed -->
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <p>&copy; 2025 Suchit Gaikwad (Teradata) for Unilever. All Rights Reserved.</p>
+    </footer>
+
+    <script src="./create-user.js"></script>
+    <script>
+        // filepath: c:\Users\sg255149\OneDrive - Teradata\Desktop\procedure_website\create-user.html (inline script)
+        document.getElementById('normalUserCapabilityGrouping').addEventListener('change', function() {
+            const mapping = {
+                'ESRA': 'Isarath Ali',
+                'Finance Connect': 'Rohit Roa',
+                'MDT': 'Rohit Roa',
+                'ZBB': 'Rohit Roa',
+                'IPA': 'Kriti Jain',
+                'SCSM': 'Kriti Jain',
+                'FVIH': 'Kriti Jain'
+            };
+            const selected = this.value;
+            const ownerInput = document.getElementById('normalServiceOwner');
+            if (mapping[selected]) {
+                ownerInput.value = mapping[selected];
+            } else {
+                ownerInput.value = '';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grant/Revoke Statement Generator</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container nav-flex">
+            <div class="nav-main-title">
+                <a href="index.html" class="nav-logo-text">Home</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1 class="logo-header">
+            <img src="images/Teradata.png" alt="Teradata Logo" class="logo-header-img">
+            SQL Generator
+        </h1>
+        
+        <div class="content-wrapper">
+            <!-- Left side - Form -->
+            <div class="left-section">
+                <form id="sqlForm">
+                    <div class="form-group">
+                        <label for="username">
+                            Username(s):*
+                            <span class="info-btn" data-info-grant="Username to which access is to be granted." data-info-revoke="Username from whom the access will be revoked.">
+                                <i class="fa fa-info-circle"></i>
+                            </span>
+                        </label>
+                        <textarea id="username" rows="3" placeholder="Enter one username per line (e.g., Vivekanand.Chavan)" required></textarea>
+                        <small class="username-format-info">Format: firstname.lastname (e.g., Vivekanand.Chavan). Only one username per line is allowed.</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="roleName">
+                            Role Name(s):*
+                            <span class="info-btn" data-info-grant="Role(s) to be assigned. Can be restricted or non-restricted." data-info-revoke="Role(s) to be revoked (can be restricted or non-restricted).">
+                                <i class="fa fa-info-circle"></i>
+                            </span>
+                        </label>
+                        <textarea id="roleName" rows="3" placeholder="Enter one role name per line" required></textarea>
+                    </div>
+
+                    <div class="form-group access-type">
+                        <label for="accessType">
+                            Access Type:*
+                            <span class="info-btn" data-info-grant="Specify access type: 'R' for Restricted, 'NR' for Non-Restricted." data-info-revoke="Specify access type: 'R' for Restricted, 'NR' for Non-Restricted.">
+                                <i class="fa fa-info-circle"></i>
+                            </span>
+                        </label>
+                        <select id="accessType" required>
+                            <option value="N">New access (N)</option>
+                            <option value="E">Extend access (E)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group expiry-date">
+                        <label for="expiryDate">
+                            Expiry Date:*
+                            <span class="info-btn" data-info-grant="Required only for restricted roles." data-info-revoke="Required only for restricted roles.">
+                                <i class="fa fa-info-circle"></i>
+                            </span>
+                        </label>
+                        <input type="date" id="expiryDate" required>
+                    </div>
+
+                    <div class="checkbox-container">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="revokeRole">
+                            <span>I want to revoke this role instead</span>
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="button" id="generate">Generate SQL</button>
+                    </div>
+                </form>
+
+                <div class="output-container">
+                    <div class="output-header">
+                        <h2>Generated SQL</h2>
+                        <button id="copyBtn" type="button">Copy to Clipboard</button>
+                    </div>
+                    <pre id="output"></pre>
+                </div>
+            </div>
+
+            <!-- Info box removed -->
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <p>&copy; 2025 Suchit Gaikwad (Teradata) for Unilever. All Rights Reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
